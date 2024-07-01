@@ -1,0 +1,29 @@
+
+
+server:
+  port: 8100
+spring:
+  application:
+    name: ApiGateway
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+        routes:
+          - id: AuthService
+            uri: lb://AuthService
+            predicates:
+              - Path=/auth/**
+          - id: Demo
+            uri: lb://AuthService
+            predicates:
+              - Path=/api/v1/**
+            filters:
+              - AuthenticationFilter
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+#    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8084/eureka

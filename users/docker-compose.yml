@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  myapp:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      - myappdb
+    environment:
+      POSTGRES_USE: test
+      POSTGRES_PASSWORD: mypassword
+      SPRING_PROFILES_ACTIVE: production
+      SPRING_DATASOURCE_URL: jdbc:postgresql://myappdb:5432/data  # Update database connection URL
+      SPRING_DATASOURCE_USERNAME: test  # Update username
+      SPRING_DATASOURCE_PASSWORD: mypassword  # Update password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  myappdb:
+    image: mypgdatabase:latest
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: data
+    ports:
+      - "5433:5432"
